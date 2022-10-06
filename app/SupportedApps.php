@@ -14,6 +14,8 @@ abstract class SupportedApps
 
     protected $error;
 
+    protected $liveStatsRefreshInterval = env('LIVE_STATS_REFRESH_INTERVAL', 30000);
+
     public function appTest($url, $attrs = [], $overridevars = false)
     {
         if (empty($this->config->url)) {
@@ -105,7 +107,7 @@ abstract class SupportedApps
 
         $html = view('SupportedApps::'.$name.'.livestats', $data)->with('data', $data)->render();
 
-        return json_encode(['status' => $status, 'html' => $html]);
+        return json_encode(['status' => $status, 'html' => $html, 'refreshInterval' => $liveStatsRefreshInterval]);
         //return
     }
 

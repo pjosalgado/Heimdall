@@ -572,11 +572,8 @@ $.when($.ready).then(function () {
 
     livestatsContainers.each(function (index) {
       var id = $(this).data('id');
-      var dataonly = $(this).data('dataonly');
-      var increaseby = dataonly == 1 ? 20000 : 1000;
       var container = $(this);
-      var max_timer = 30000;
-      var timer = 5000;
+      var timer = 30000;
 
       var fun = function worker() {
         $.ajax({
@@ -584,9 +581,10 @@ $.when($.ready).then(function () {
           dataType: 'json',
           success: function success(data) {
             container.html(data.html);
-            if (data.status == 'active') timer = increaseby;else {
-              if (timer < max_timer) timer += 2000;
-            }
+            timer = data.refreshInterval;
+          },
+          error: function error(data) {
+            timer = 5000;
           },
           complete: function complete() {
             // Schedule the next request when the current one's complete
